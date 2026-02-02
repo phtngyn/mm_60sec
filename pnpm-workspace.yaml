@@ -1,0 +1,26 @@
+auto-install-peers: false
+
+shamefully-hoist: true
+
+catalogMode: prefer
+
+cleanupUnusedCatalogs: true
+
+shellEmulator: true
+
+strict-peer-dependencies: false
+
+trustPolicy: no-downgrade
+overrides:
+  chokidar: ^5.0.0
+  magicast: ^0.5.1
+  semver: ^7.7.3
+
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - unrs-resolver
+  - vue-demi
+onlyBuiltDependencies:
+  - simple-git-hooks
