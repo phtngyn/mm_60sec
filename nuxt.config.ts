@@ -3,23 +3,22 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@vueuse/nuxt',
+    '@nuxt/content',
+    'nuxt-studio',
   ],
+
   devtools: {
     enabled: false,
   },
 
   css: ['~/assets/css/main.css'],
 
-  future: {
-    compatibilityVersion: 5,
-  },
-
   experimental: {
     viteEnvironmentApi: true,
     typescriptPlugin: true,
   },
 
-  compatibilityDate: '2025-05-01',
+  compatibilityDate: '2026-02-02',
 
   eslint: {
     config: {
@@ -27,6 +26,19 @@ export default defineNuxtConfig({
       nuxt: {
         sortConfigKeys: true,
       },
+    },
+  },
+
+  studio: {
+    // Studio admin route (default: '/_studio')
+    route: '/_studio',
+
+    // Git repository configuration (owner and repo are required)
+    repository: {
+      provider: 'github', // 'github' or 'gitlab'
+      owner: 'your-username', // your GitHub/GitLab username or organization
+      repo: 'your-repo', // your repository name
+      branch: 'main', // the branch to commit to (default: main)
     },
   },
 })

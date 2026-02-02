@@ -1,7 +1,5 @@
 auto-install-peers: false
 
-shamefully-hoist: true
-
 catalogMode: prefer
 
 cleanupUnusedCatalogs: true
@@ -16,6 +14,25 @@ overrides:
   magicast: ^0.5.1
   semver: ^7.7.3
 
+catalog:
+  '@antfu/eslint-config': ^7.2.0
+  '@nuxt/content': ^3.11.0
+  '@nuxt/eslint': ^1.13.0
+  '@nuxt/ui': ^4.4.0
+  '@vueuse/core': ^14.2.0
+  '@vueuse/nuxt': ^14.2.0
+  better-sqlite3: ^12.6.2
+  eslint: ^9.39.2
+  eslint-plugin-format: ^1.3.1
+  nano-staged: ^0.9.0
+  nuxt: ^4.3.0
+  nuxt-studio: 1.2.0
+  simple-git-hooks: ^2.13.1
+  typescript: ^5.9.3
+  vue: ^3.5.27
+  vue-router: ^4.6.4
+  vue-tsc: ^3.2.4
+  zod: ^4.3.6
 ignoredBuiltDependencies:
   - '@parcel/watcher'
   - '@tailwindcss/oxide'
@@ -24,3 +41,4 @@ ignoredBuiltDependencies:
   - vue-demi
 onlyBuiltDependencies:
   - simple-git-hooks
+  - better-sqlite3
