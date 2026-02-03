@@ -5,8 +5,7 @@ const items = ref<NavigationMenuItem[]>([
   {
     label: 'Mobile Developer',
     badge: 'm/w/d',
-    to: '#',
-    active: true,
+    to: '#hero',
   },
   {
     label: 'Deine Vorteile',
@@ -14,7 +13,7 @@ const items = ref<NavigationMenuItem[]>([
   },
   {
     label: 'Jetzt bewerben!',
-    to: '#',
+    to: '#apply',
   },
   {
     label: 'Standorte',
@@ -22,7 +21,7 @@ const items = ref<NavigationMenuItem[]>([
   },
   {
     label: 'Kontakt',
-    to: '#',
+    to: '#contact',
   },
 
 ])
@@ -53,6 +52,7 @@ const items = ref<NavigationMenuItem[]>([
     </UHeader>
 
     <UPageHero
+      id="hero"
       title="Mobile Developer"
       orientation="horizontal"
       :links="[{
@@ -108,7 +108,10 @@ const items = ref<NavigationMenuItem[]>([
       <div class="w-140 h-84 bg-elevated border border-dashed border-default rounded-md" />
     </UPageHero>
 
-    <UPageSection class="bg-elevated">
+    <UPageSection
+      id="benefit"
+      class="bg-elevated"
+    >
       <div class="grid gap-14">
         <div class="grid grid-cols-2 gap-9">
           <div class="grid gap-6">
@@ -232,7 +235,7 @@ const items = ref<NavigationMenuItem[]>([
           </div>
         </div>
 
-        <div class="grid gap-12 place-items-center p-12 -mx-40">
+        <div class="grid gap-12 place-items-center p-12 -mx-57.5">
           <h2 class="text-4xl font-semibold">
             Deine Vorteile bei MULTA MEDIO
           </h2>
@@ -259,19 +262,46 @@ const items = ref<NavigationMenuItem[]>([
       </div>
     </UPageSection>
 
-    <UPageSection>
-      <div class="grid gap-12 place-items-center">
-        <h2 class="text-4xl font-semibold">
+    <UPageSection
+      id="apply"
+    >
+      <div class="grid place-items-center">
+        <h2 class="text-4xl font-semibold mb-12">
           Jetzt in 60 Sekunden bewerben!
         </h2>
 
-        <div class="relative bg-inverted py-24 px-16 w-full rounded-xl text-inverted">
-          <div>
-            Something
-          </div>
+        <div class="flex items-center gap-4 mb-6">
+          <UButton icon="i-lucide-arrow-left" class=" rounded-full" size="md" />
+          <div class="bg-inverted py-24 px-16 w-full rounded-xl text-inverted grid gap-8">
+            <div class="grid gap-6">
+              <p class="text-4xl font-bold">
+                Worauf legst du bei Deinem Arbeitgeber am meisten Wert?
+              </p>
+              <p class="text-lg">
+                Mehrfachauswahl möglich
+              </p>
+            </div>
 
-          <UButton icon="i-lucide-arrow-left" class="absolute top-1/2 -translate-x-1/2 -left-8 rounded-full" />
-          <UButton icon="i-lucide-arrow-right" class="absolute top-1/2 -translate-x-1/2 -right-16 rounded-full" />
+            <UCheckboxGroup
+              :ui="{
+                fieldset: 'grid grid-cols-3 gap-6',
+                label: 'text-inverted',
+              }"
+              :items="[
+                'Weiterbildung',
+                'Homeoffice',
+                'Angemessenes Gehalt',
+                'Gute Ausstattung',
+                'Interessante Aufgaben',
+                'Viele Benefits',
+                'Flexible Arbeitszeiten',
+                'Sonstiges',
+              ]"
+              variant="list"
+              size="xl"
+            />
+          </div>
+          <UButton icon="i-lucide-arrow-right" class=" rounded-full" size="md" />
         </div>
 
         <div class="flex gap-3">
@@ -283,5 +313,75 @@ const items = ref<NavigationMenuItem[]>([
         </div>
       </div>
     </UPageSection>
+
+    <UPageCTA
+      id="contact"
+      title="Kontaktiere uns!"
+      orientation="horizontal"
+      :ui="{
+        container: 'lg:flex lg:flex-row lg:gap-24',
+      }"
+      reverse
+      :links="[
+        {
+          label: 'Per E-Mail bewerben',
+          color: 'primary',
+          trailingIcon: 'i-lucide-send-horizontal',
+        },
+      ]"
+    >
+      <template #description>
+        <p class="mb-6">
+          A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications.
+        </p>
+        <p class="text-xl font-medium">
+          MULTA MEDIO Informationssysteme AG
+        </p>
+        <p>Wiesenmühlenstraße 1 • 36037 Fulda</p>
+      </template>
+
+      <div class="size-60 bg-elevated rounded-full border border-dashed border-muted shrink-0" />
+    </UPageCTA>
+
+    <div class="bg-inverted h-60 flex flex-col justify-end">
+      <UFooter>
+        <template #left>
+          <p class="text-muted text-sm">
+            Copyright © {{ new Date().getFullYear() }} MULTA MEGIO
+          </p>
+        </template>
+
+        <UNavigationMenu
+          :items="[
+            { label: 'Impressum' },
+            { label: 'Datenschutz' },
+            { label: 'Kontakt' },
+          ]"
+          variant="link"
+          :ui="{ link: 'text-inverted hover:text-muted' }"
+        />
+
+        <template #right>
+          <UButton
+            icon="i-simple-icons-facebook"
+            color="neutral"
+            variant="link"
+            class="text-inverted"
+          />
+          <UButton
+            icon="i-simple-icons-instagram"
+            color="neutral"
+            variant="link"
+            class="text-inverted"
+          />
+          <UButton
+            icon="i-simple-icons-linkedin"
+            color="neutral"
+            variant="link"
+            class="text-inverted"
+          />
+        </template>
+      </UFooter>
+    </div>
   </div>
 </template>

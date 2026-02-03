@@ -20,4 +20,5 @@
 
 :root {
   --ui-primary: var(--color-brand-400);
+  --ui-container: 71.25rem;
 }
