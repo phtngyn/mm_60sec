@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Fetch content from Nuxt Content
+const { data: content } = await useAsyncData(() => queryCollection('content').path('/').first())
+
 // Create carousel ref first
 const carousel = useTemplateRef('carousel')
 
@@ -14,43 +17,7 @@ const {
   goToStep,
   onSelect,
 } = useApplyForm({
-  steps: [
-    {
-      id: 'priorities',
-      type: 'checkbox',
-      field: 'priorities',
-      label: 'Worauf legst du bei Deinem Arbeitgeber am meisten Wert?',
-      description: 'Mehrfachauswahl möglich',
-      items: [
-        'Weiterbildung',
-        'Homeoffice',
-        'Angemessenes Gehalt',
-        'Gute Ausstattung',
-        'Interessante Aufgaben',
-        'Viele Benefits',
-        'Flexible Arbeitszeiten',
-        'Sonstiges',
-      ],
-      validation: {
-        min: 1,
-        minMessage: 'Bitte wähle mindestens eine Option aus',
-        max: 3,
-        maxMessage: 'Du kannst maximal 3 Optionen auswählen',
-      },
-    },
-    {
-      id: 'email',
-      type: 'input',
-      field: 'email',
-      label: 'Wie können wir dich kontaktieren?',
-      description: 'Gib uns deine E-Mail-Adresse',
-      validation: {
-        type: 'email',
-        required: true,
-        invalidMessage: 'Bitte gib eine gültige E-Mail-Adresse ein',
-      },
-    },
-  ],
+  steps: content.value?.apply.steps || [],
 }, carousel)
 
 function onSubmit(event: { data: any }) {
@@ -59,7 +26,10 @@ function onSubmit(event: { data: any }) {
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div
+    v-if="content"
+    class="min-h-screen"
+  >
     <UHeader :ui="{ container: 'px-28 sm:px-28 lg:px-28 max-w-480' }">
       <template #left>
         <div class="flex items-center gap-3">
@@ -109,7 +79,7 @@ function onSubmit(event: { data: any }) {
 
     <UPageHero
       id="hero"
-      title="Mobile Developer"
+      :title="content.hero.title"
       orientation="horizontal"
       :links="[{
         label: 'Jetzt in 60 Sekunden bewerben!',
@@ -122,43 +92,11 @@ function onSubmit(event: { data: any }) {
       }"
     >
       <template #headline>
-        <UBadge color="neutral">
-          m/w/d
-        </UBadge>
+        <MDC :value="content.hero.headline" />
       </template>
 
       <template #description>
-        <ul class="flex gap-2 items-center mt-3">
-          <li>
-            <UBadge color="neutral" size="sm">
-              Fulda
-            </UBadge>
-          </li>
-          <li>
-            <UBadge color="neutral" size="sm">
-              1. Februar 2026
-            </UBadge>
-          </li>
-          <li>
-            <UBadge size="sm">
-              Flutter
-            </UBadge>
-          </li>
-          <li>
-            <UBadge size="sm">
-              iOS
-            </UBadge>
-          </li>
-          <li>
-            <UBadge size="sm">
-              Typescript
-            </UBadge>
-          </li>
-        </ul>
-
-        <p class="mt-6">
-          A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications."
-        </p>
+        <MDC :value="content.hero.description" />
       </template>
 
       <div class="w-140 h-84 bg-elevated border border-dashed border-default rounded-md" />
@@ -172,102 +110,44 @@ function onSubmit(event: { data: any }) {
         <div class="grid grid-cols-2 gap-9">
           <div class="grid gap-6">
             <div class="flex items-start gap-2">
-              <UIcon name="i-lucide-wrench" class="size-8 text-primary" />
+              <UIcon :name="content.profile.icon" class="size-8 text-primary" />
               <div>
                 <h2 class="text-3xl font-bold">
-                  Dein Profil
+                  {{ content.profile.title }}
                 </h2>
 
                 <ul class="flex gap-2 items-center">
-                  <li>
+                  <li v-for="tag in content.profile.tags" :key="tag">
                     <UBadge size="sm">
-                      Flutter
-                    </UBadge>
-                  </li>
-                  <li>
-                    <UBadge size="sm">
-                      iOS
-                    </UBadge>
-                  </li>
-                  <li>
-                    <UBadge size="sm">
-                      Typescript
+                      {{ tag }}
                     </UBadge>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <ul class="ml-4 list-disc list-outside *:text-muted *:text-lg">
-              <li>
-                We've built a strong, lasting partnership
-              </li>
-              <li>
-                Their trust is our driving force
-              </li>
-              <li>
-                Propelling us towards shared success
-              </li>
-              <li>
-                A comprehensive, Nuxt-integrated UI library
-              </li>
-              <li>
-                Providing a rich set of fully-styled, accessible
-              </li>
-              <li>
-                Highly customizable components for building modern web applications
-              </li>
-            </ul>
+            <MDC :value="content.profile.content" />
           </div>
 
           <div class="grid gap-6">
             <div class="flex items-start gap-2">
-              <UIcon name="i-lucide-layout-list" class="size-8 text-primary" />
+              <UIcon :name="content.tasks.icon" class="size-8 text-primary" />
               <div>
                 <h2 class="text-3xl font-bold">
-                  Deine Aufgaben
+                  {{ content.tasks.title }}
                 </h2>
 
                 <ul class="flex gap-2 items-center">
-                  <li>
+                  <li v-for="tag in content.tasks.tags" :key="tag">
                     <UBadge size="sm">
-                      Flutter
-                    </UBadge>
-                  </li>
-                  <li>
-                    <UBadge size="sm">
-                      iOS
-                    </UBadge>
-                  </li>
-                  <li>
-                    <UBadge size="sm">
-                      Typescript
+                      {{ tag }}
                     </UBadge>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <ul class="ml-4 list-disc list-outside *:text-muted *:text-lg">
-              <li>
-                We've built a strong, lasting partnership
-              </li>
-              <li>
-                Their trust is our driving force
-              </li>
-              <li>
-                Propelling us towards shared success
-              </li>
-              <li>
-                A comprehensive, Nuxt-integrated UI library
-              </li>
-              <li>
-                Providing a rich set of fully-styled, accessible
-              </li>
-              <li>
-                Highly customizable components for building modern web applications
-              </li>
-            </ul>
+            <MDC :value="content.tasks.content" />
           </div>
         </div>
 
@@ -276,39 +156,35 @@ function onSubmit(event: { data: any }) {
 
           <div class="grid gap-6">
             <h2 class="text-3xl font-bold">
-              Über uns
+              {{ content.about.title }}
             </h2>
 
-            <div class="grid gap-4 text-lg">
-              <p>A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications.</p>
-
-              <p>A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible</p>
-            </div>
+            <MDC :value="content.about.content" />
 
             <UButton icon="i-lucide-arrow-right" class="mt-auto w-fit">
-              Mehr erfahren
+              {{ content.about.buttonLabel }}
             </UButton>
           </div>
         </div>
 
         <div class="grid gap-12 place-items-center p-12 -mx-57.5">
           <h2 class="text-4xl font-semibold">
-            Deine Vorteile bei MULTA MEDIO
+            {{ content.benefits.title }}
           </h2>
 
           <ul class="grid grid-cols-3 gap-6">
-            <li v-for="i in 6" :key="i">
+            <li v-for="(item, index) in content.benefits.items" :key="index">
               <div class="grid gap-4 p-6 bg-default place-items-center">
                 <div class="size-37 rounded-full bg-elevated flex items-center justify-center">
-                  <UIcon name="i-lucide-rocket" class="text-primary size-12" />
+                  <UIcon :name="item.icon" class="text-primary size-12" />
                 </div>
 
                 <div class="text-center">
                   <p class="text-3xl font-bold">
-                    Title
+                    {{ item.title }}
                   </p>
                   <p class="text-muted">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+                    {{ item.description }}
                   </p>
                 </div>
               </div>
@@ -323,7 +199,7 @@ function onSubmit(event: { data: any }) {
     >
       <div class="grid place-items-center">
         <h2 class="text-4xl font-semibold mb-12">
-          Jetzt in 60 Sekunden bewerben!
+          {{ content.apply.title }}
         </h2>
 
         <div class="w-full mb-6 bg-inverted rounded-xl">
@@ -464,7 +340,7 @@ function onSubmit(event: { data: any }) {
 
     <UPageCTA
       id="contact"
-      title="Kontaktiere uns!"
+      :title="content.contact.title"
       orientation="horizontal"
       :ui="{
         container: 'lg:flex lg:flex-row lg:gap-24',
@@ -472,20 +348,14 @@ function onSubmit(event: { data: any }) {
       reverse
       :links="[
         {
-          label: 'Per E-Mail bewerben',
+          label: content.contact.buttonLabel,
           color: 'primary',
           trailingIcon: 'i-lucide-send-horizontal',
         },
       ]"
     >
       <template #description>
-        <p class="mb-6">
-          A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications.
-        </p>
-        <p class="text-xl font-medium">
-          MULTA MEDIO Informationssysteme AG
-        </p>
-        <p>Wiesenmühlenstraße 1 • 36037 Fulda</p>
+        <MDC :value="content.contact.description" />
       </template>
 
       <div class="size-60 bg-elevated rounded-full border border-dashed border-muted shrink-0" />
@@ -494,9 +364,7 @@ function onSubmit(event: { data: any }) {
     <div class="bg-inverted h-60 flex flex-col justify-end">
       <UFooter>
         <template #left>
-          <p class="text-muted text-sm">
-            Copyright © {{ new Date().getFullYear() }} MULTA MEGIO
-          </p>
+          <MDC :value="content.footer.left" />
         </template>
 
         <UNavigationMenu

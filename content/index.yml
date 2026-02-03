@@ -1,0 +1,117 @@
+hero:
+  title: Mobile Developer
+  headline: |
+    **m/w/d**
+  description: |
+    - **Fulda**
+    - **1. Februar 2026**
+    - Flutter
+    - iOS
+    - Typescript
+
+    A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications.
+
+profile:
+  title: Dein Profil
+  icon: i-lucide-wrench
+  tags:
+    - Flutter
+    - iOS
+    - Typescript
+  content: |
+    - We've built a strong, lasting partnership
+    - Their trust is our driving force
+    - Propelling us towards shared success
+    - A comprehensive, Nuxt-integrated UI library
+    - Providing a rich set of fully-styled, accessible
+    - Highly customizable components for building modern web applications
+
+tasks:
+  title: Deine Aufgaben
+  icon: i-lucide-layout-list
+  tags:
+    - Flutter
+    - iOS
+    - Typescript
+  content: |
+    - We've built a strong, lasting partnership
+    - Their trust is our driving force
+    - Propelling us towards shared success
+    - A comprehensive, Nuxt-integrated UI library
+    - Providing a rich set of fully-styled, accessible
+    - Highly customizable components for building modern web applications
+
+about:
+  title: Über uns
+  content: |
+    A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications.
+
+    A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible
+  buttonLabel: Mehr erfahren
+
+benefits:
+  title: Deine Vorteile bei MULTA MEDIO
+  items:
+    - icon: i-lucide-rocket
+      title: Title
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+    - icon: i-lucide-rocket
+      title: Title
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+    - icon: i-lucide-rocket
+      title: Title
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+    - icon: i-lucide-rocket
+      title: Title
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+    - icon: i-lucide-rocket
+      title: Title
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+    - icon: i-lucide-rocket
+      title: Title
+      description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim
+
+apply:
+  title: Jetzt in 60 Sekunden bewerben!
+  steps:
+    - id: priorities
+      type: checkbox
+      field: priorities
+      label: Worauf legst du bei Deinem Arbeitgeber am meisten Wert?
+      description: Mehrfachauswahl möglich
+      items:
+        - Weiterbildung
+        - Homeoffice
+        - Angemessenes Gehalt
+        - Gute Ausstattung
+        - Interessante Aufgaben
+        - Viele Benefits
+        - Flexible Arbeitszeiten
+        - Sonstiges
+      validation:
+        min: 1
+        minMessage: Bitte wähle mindestens eine Option aus
+        max: 3
+        maxMessage: Du kannst maximal 3 Optionen auswählen
+    - id: email
+      type: input
+      field: email
+      label: Wie können wir dich kontaktieren?
+      description: Gib uns deine E-Mail-Adresse
+      validation:
+        type: email
+        required: true
+        invalidMessage: Bitte gib eine gültige E-Mail-Adresse ein
+
+contact:
+  title: Kontaktiere uns!
+  description: |
+    A comprehensive, Nuxt-integrated UI library providing a rich set of fully-styled, accessible and highly customizable components for building modern web applications.
+
+    **MULTA MEDIO Informationssysteme AG**
+
+    Wiesenmühlenstraße 1 • 36037 Fulda
+  buttonLabel: Per E-Mail bewerben
+
+footer:
+  left: Copyright © 2026 MULTA MEDIO
