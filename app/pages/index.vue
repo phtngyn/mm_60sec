@@ -1,30 +1,61 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
+// Create carousel ref first
+const carousel = useTemplateRef('carousel')
 
-const items = ref<NavigationMenuItem[]>([
-  {
-    label: 'Mobile Developer',
-    badge: 'm/w/d',
-    to: '#hero',
-  },
-  {
-    label: 'Deine Vorteile',
-    to: '#benefit',
-  },
-  {
-    label: 'Jetzt bewerben!',
-    to: '#apply',
-  },
-  {
-    label: 'Standorte',
-    to: '#',
-  },
-  {
-    label: 'Kontakt',
-    to: '#contact',
-  },
+// Use the form composable with carousel ref
+const {
+  schema,
+  form,
+  state,
+  currentStep,
+  isLastStep,
+  nextStep,
+  prevStep,
+  goToStep,
+  onSelect,
+} = useApplyForm({
+  steps: [
+    {
+      id: 'priorities',
+      type: 'checkbox',
+      field: 'priorities',
+      label: 'Worauf legst du bei Deinem Arbeitgeber am meisten Wert?',
+      description: 'Mehrfachauswahl möglich',
+      items: [
+        'Weiterbildung',
+        'Homeoffice',
+        'Angemessenes Gehalt',
+        'Gute Ausstattung',
+        'Interessante Aufgaben',
+        'Viele Benefits',
+        'Flexible Arbeitszeiten',
+        'Sonstiges',
+      ],
+      validation: {
+        min: 1,
+        minMessage: 'Bitte wähle mindestens eine Option aus',
+        max: 3,
+        maxMessage: 'Du kannst maximal 3 Optionen auswählen',
+      },
+    },
+    {
+      id: 'email',
+      type: 'input',
+      field: 'email',
+      label: 'Wie können wir dich kontaktieren?',
+      description: 'Gib uns deine E-Mail-Adresse',
+      validation: {
+        type: 'email',
+        required: true,
+        invalidMessage: 'Bitte gib eine gültige E-Mail-Adresse ein',
+      },
+    },
+  ],
+}, carousel)
 
-])
+function onSubmit(event: { data: any }) {
+  console.log('Form submitted:', event.data)
+}
 </script>
 
 <template>
@@ -38,7 +69,32 @@ const items = ref<NavigationMenuItem[]>([
         </div>
       </template>
 
-      <UNavigationMenu :items="items" variant="link" />
+      <UNavigationMenu
+        :items="[
+          {
+            label: 'Mobile Developer',
+            badge: 'm/w/d',
+            to: '#hero',
+          },
+          {
+            label: 'Deine Vorteile',
+            to: '#benefit',
+          },
+          {
+            label: 'Jetzt bewerben!',
+            to: '#apply',
+          },
+          {
+            label: 'Standorte',
+            to: '#',
+          },
+          {
+            label: 'Kontakt',
+            to: '#contact',
+          },
+
+        ]" variant="link"
+      />
 
       <template #right>
         <div class="flex items-center gap-2">
@@ -270,46 +326,138 @@ const items = ref<NavigationMenuItem[]>([
           Jetzt in 60 Sekunden bewerben!
         </h2>
 
-        <div class="flex items-center gap-4 mb-6">
-          <UButton icon="i-lucide-arrow-left" class=" rounded-full" size="md" />
-          <div class="bg-inverted py-24 px-16 w-full rounded-xl text-inverted grid gap-8">
-            <div class="grid gap-6">
-              <p class="text-4xl font-bold">
-                Worauf legst du bei Deinem Arbeitgeber am meisten Wert?
-              </p>
-              <p class="text-lg">
-                Mehrfachauswahl möglich
-              </p>
-            </div>
-
-            <UCheckboxGroup
+        <div class="w-full mb-6 bg-inverted rounded-xl">
+          <div class="max-w-280 mx-auto min-h-120">
+            <UCarousel
+              ref="carousel"
+              v-slot="{ item: step }"
+              :items="form.metadata.steps"
               :ui="{
-                fieldset: 'grid grid-cols-3 gap-6',
-                label: 'text-inverted',
+                root: 'focus:outline-none',
+                container: 'ms-0',
+                item: 'ps-0',
               }"
-              :items="[
-                'Weiterbildung',
-                'Homeoffice',
-                'Angemessenes Gehalt',
-                'Gute Ausstattung',
-                'Interessante Aufgaben',
-                'Viele Benefits',
-                'Flexible Arbeitszeiten',
-                'Sonstiges',
-              ]"
-              variant="list"
-              size="xl"
-            />
+              :watch-drag="false"
+              @select="onSelect"
+            >
+              <div class="py-24 px-16 w-full text-inverted grid gap-8">
+                <div class="grid gap-6">
+                  <p class="text-4xl font-bold">
+                    {{ step.label }}
+                  </p>
+                  <p v-if="step.description" class="text-lg">
+                    {{ step.description }}
+                  </p>
+                </div>
+
+                <UForm
+                  :schema="schema"
+                  :state="state"
+                  @submit="onSubmit"
+                >
+                  <!-- Render step dynamically -->
+                  <div>
+                    <!-- Checkbox Group -->
+                    <template v-if="step.type === 'checkbox'">
+                      <UFormField :name="step.field">
+                        <UCheckboxGroup
+                          v-model="state[step.field]"
+                          :ui="{
+                            fieldset: 'grid grid-cols-3 gap-6',
+                            label: 'text-inverted',
+                          }"
+                          :items="step.items"
+                          variant="list"
+                          size="xl"
+                        />
+                      </UFormField>
+                    </template>
+
+                    <!-- Radio Group -->
+                    <template v-else-if="step.type === 'radio'">
+                      <UFormField :name="step.field">
+                        <URadioGroup
+                          v-model="state[step.field]"
+                          :ui="{
+                            fieldset: 'grid grid-cols-3 gap-6',
+                            label: 'text-inverted',
+                          }"
+                          :items="step.items"
+                          variant="list"
+                          size="xl"
+                        />
+                      </UFormField>
+                    </template>
+
+                    <!-- Single Input -->
+                    <template v-else-if="step.type === 'input'">
+                      <UFormField
+                        :label="step.label"
+                        :name="step.field"
+                      >
+                        <UInput
+                          v-model="state[step.field]"
+                          :type="step.validation.type === 'number' ? 'number' : 'text'"
+                        />
+                      </UFormField>
+                    </template>
+
+                    <!-- Multi Input -->
+                    <template v-else-if="step.type === 'multi-input'">
+                      <div class="grid gap-4">
+                        <UFormField
+                          v-for="field in step.fields"
+                          :key="field.field"
+                          :label="field.label"
+                          :name="field.field"
+                        >
+                          <UInput
+                            v-model="state[field.field]"
+                            :type="field.validation.type === 'number' ? 'number' : 'text'"
+                          />
+                        </UFormField>
+                      </div>
+                    </template>
+
+                    <!-- Navigation buttons -->
+                    <div class="flex gap-4 mt-6">
+                      <UButton
+                        v-if="currentStep > 0"
+                        type="button"
+                        variant="outline"
+                        @click="prevStep"
+                      >
+                        Zurück
+                      </UButton>
+                      <UButton
+                        v-if="!isLastStep"
+                        type="button"
+                        @click="nextStep"
+                      >
+                        Weiter
+                      </UButton>
+                      <UButton
+                        v-else
+                        type="submit"
+                      >
+                        Absenden
+                      </UButton>
+                    </div>
+                  </div>
+                </UForm>
+              </div>
+            </UCarousel>
           </div>
-          <UButton icon="i-lucide-arrow-right" class=" rounded-full" size="md" />
         </div>
 
         <div class="flex gap-3">
-          <button class="size-3 rounded-full bg-inverted" />
-          <button class="size-3 rounded-full bg-accented" />
-          <button class="size-3 rounded-full bg-accented" />
-          <button class="size-3 rounded-full bg-accented" />
-          <button class="size-3 rounded-full bg-accented" />
+          <button
+            v-for="(_, index) in form.stepSchemas"
+            :key="index"
+            class="size-3 rounded-full transition-colors"
+            :class="currentStep === index ? 'bg-inverted' : 'bg-accented'"
+            @click="goToStep(index)"
+          />
         </div>
       </div>
     </UPageSection>
