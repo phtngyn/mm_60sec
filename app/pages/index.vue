@@ -109,7 +109,6 @@ const {
     </UPageHero>
 
     <UPageSection
-      id="benefit"
       class="bg-elevated"
       :ui="{ container: 'py-12!' }"
     >
@@ -173,37 +172,41 @@ const {
             </UButton>
           </div>
         </div>
-
-        <div class="grid gap-12 place-items-center p-12 -mx-57.5">
-          <h2 class="text-4xl font-semibold">
-            {{ content.benefits.title }}
-          </h2>
-
-          <ul class="grid grid-cols-3 gap-6">
-            <li
-              v-for="(item, index) in content.benefits.items"
-              :key="index"
-            >
-              <div class="grid gap-4 p-6 bg-default place-items-center border border-default rounded-xl">
-                <div class="size-37 rounded-full bg-elevated flex items-center justify-center">
-                  <UIcon :name="item.icon" class="text-primary size-12" />
-                </div>
-
-                <div class="text-center">
-                  <p class="text-3xl font-bold">
-                    {{ item.title }}
-                  </p>
-                  <p class="text-muted">
-                    {{ item.description }}
-                  </p>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
       </div>
     </UPageSection>
+    <UPageSection
+      id="benefit"
+      class="bg-elevated"
+      :ui="{ container: 'max-w-360 py-12!' }"
+    >
+      <div class="grid gap-12 place-items-center p-12">
+        <h2 class="text-4xl font-semibold">
+          {{ content.benefits.title }}
+        </h2>
 
+        <ul class="grid grid-cols-3 gap-6">
+          <li
+            v-for="(item, index) in content.benefits.items"
+            :key="index"
+          >
+            <div class="grid gap-4 p-6 bg-default place-items-center border border-default rounded-xl">
+              <div class="size-37 rounded-full bg-elevated flex items-center justify-center">
+                <UIcon :name="item.icon" class="text-primary size-12" />
+              </div>
+
+              <div class="text-center">
+                <p class="text-3xl font-bold">
+                  {{ item.title }}
+                </p>
+                <p class="text-muted">
+                  {{ item.description }}
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </UPageSection>
     <UPageSection
       id="apply"
       :ui="{ container: 'py-12!' }"
