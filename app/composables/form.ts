@@ -1,15 +1,8 @@
-import type { EmblaCarouselType } from 'embla-carousel'
-import type { ShallowRef, ShallowUnwrapRef } from 'vue'
+import type { FormSubmitEvent } from '@nuxt/ui'
 import * as z from 'zod'
 
 // Validation types for input fields
 type InputValidationType = 'string' | 'email' | 'number'
-
-// UCarousel component exposed type
-interface CarouselComponent {
-  emblaRef?: Ref<HTMLElement | undefined>
-  emblaApi?: Ref<EmblaCarouselType | undefined>
-}
 
 // Base field config
 interface BaseFieldConfig {
@@ -92,7 +85,7 @@ interface FormSchema {
   }
 }
 
-export function createFormSchema(config: FormConfig): FormSchema {
+function createForm(config: FormConfig): FormSchema {
   const schemaFields: Record<string, z.ZodTypeAny> = {}
   const stepSchemas: z.ZodObject<any>[] = []
   const initialState: Record<string, any> = {}
@@ -187,8 +180,8 @@ function createInputSchema(validation: InputFieldConfig['validation']) {
   switch (validation.type) {
     case 'email':
       fieldSchema = validation.invalidMessage
-        ? z.string().email(validation.invalidMessage)
-        : z.string().email()
+        ? z.email(validation.invalidMessage)
+        : z.email()
       break
     case 'number':
       return z.number()
@@ -226,77 +219,21 @@ function createInputSchema(validation: InputFieldConfig['validation']) {
 
 export function useApplyForm(
   config: FormConfig,
-  carouselRef: ShallowRef<ShallowUnwrapRef<CarouselComponent | null>>,
 ) {
-  const form = createFormSchema(config)
+  const form = createForm(config)
   const schema = form.schema
   type Schema = z.output<typeof schema>
 
   const state = ref<Record<string, any>>(form.metadata.initialState)
-  const currentStep = ref(0)
 
-  const currentStepConfig = computed(() => form.metadata.steps[currentStep.value]!)
-
-  function nextStep() {
-    if (currentStep.value < form.stepSchemas.length - 1) {
-      currentStep.value++
-      carouselRef.value?.emblaApi?.scrollTo(currentStep.value)
-    }
-  }
-
-  function prevStep() {
-    if (currentStep.value > 0) {
-      currentStep.value--
-      carouselRef.value?.emblaApi?.scrollTo(currentStep.value)
-    }
-  }
-
-  function onSelect(index: number) {
-    currentStep.value = index
-  }
-
-  function goToStep(index: number) {
-    if (index >= 0 && index < form.stepSchemas.length) {
-      carouselRef.value?.emblaApi?.scrollTo(index)
-    }
-  }
-
-  function submit(callback: (data: Schema) => void) {
-    return (event: { data: Schema }) => {
-      callback(event.data)
-    }
+  function submit(event: FormSubmitEvent<Schema>) {
+    console.log(event.data)
   }
 
   return {
-    // Schema & form config
     schema,
     form,
-
-    // State
     state,
-    currentStep,
-
-    // Computed
-    currentStepConfig,
-
-    // Navigation functions
-    nextStep,
-    prevStep,
-    onSelect,
-    goToStep,
-
-    // Submit handler
     submit,
   }
-}
-
-// Export types for use in components
-export type {
-  CheckboxFieldConfig,
-  FieldConfig,
-  FormConfig,
-  FormSchema,
-  InputFieldConfig,
-  MultiInputFieldConfig,
-  RadioFieldConfig,
 }

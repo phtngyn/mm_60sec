@@ -1,27 +1,18 @@
 <script setup lang="ts">
-// Fetch content from Nuxt Content
 const { data: content } = await useAsyncData(() => queryCollection('content').path('/').first())
 
-// Create carousel ref first
-const carousel = useTemplateRef('carousel')
+const formRef = useTemplateRef('formRef')
 
-// Use the form composable with carousel ref
 const {
   schema,
   form,
   state,
-  currentStep,
-  nextStep,
-  prevStep,
-  goToStep,
-  onSelect,
-} = useApplyForm({
-  steps: content.value?.apply.steps || [],
-}, carousel)
-
-function onSubmit(event: { data: any }) {
-  console.log('Form submitted:', event.data)
-}
+  submit,
+} = useApplyForm(
+  {
+    steps: content.value?.apply.steps || [],
+  },
+)
 </script>
 
 <template>
@@ -222,20 +213,22 @@ function onSubmit(event: { data: any }) {
           {{ content.apply.title }}
         </h2>
 
-        <div class="relative w-full mb-6 bg-inverted rounded-xl">
+        <div class="relative w-full mb-6 bg-inverted max-w-269 rounded-xl">
           <UCarousel
-            ref="carousel"
             v-slot="{ item: step, index }"
-            :items="form.metadata.steps"
+            :items="form.metadata?.steps ?? []"
             :ui="{
               root: 'focus:outline-none',
               container: 'ms-0',
               item: 'ps-0',
             }"
             :watch-drag="false"
-            @select="onSelect"
+            dots
+            arrows
+            :prev="{ variant: 'solid', color: 'primary' }"
+            :next="{ variant: 'solid', color: 'primary' }"
           >
-            <div class="py-24 px-16 min-h-120 w-full text-inverted grid gap-8">
+            <div class="py-24 px-16 min-h-120 text-inverted grid gap-8">
               <div class="grid gap-6">
                 <p class="text-4xl font-bold">
                   {{ step.title }}
@@ -246,10 +239,11 @@ function onSubmit(event: { data: any }) {
               </div>
 
               <UForm
+                ref="formRef"
                 :schema="schema"
                 :state="state"
                 class="flex flex-col"
-                @submit="onSubmit"
+                @submit="submit"
               >
                 <!-- Render step dynamically -->
                 <!-- Checkbox Group -->
@@ -278,7 +272,7 @@ function onSubmit(event: { data: any }) {
                         label: 'text-inverted',
                       }"
                       :items="step.items"
-                      variant="list"
+                      variant="card"
                       size="xl"
                     />
                   </UFormField>
@@ -286,20 +280,24 @@ function onSubmit(event: { data: any }) {
 
                 <!-- Single Input -->
                 <template v-else-if="step.type === 'input'">
-                  <UFormField
-                    :label="step.title"
-                    :name="step.field"
-                  >
-                    <UInput
-                      v-model="state[step.field]"
-                      :type="step.validation.type === 'number' ? 'number' : 'text'"
-                    />
-                  </UFormField>
+                  <div class="grid grid-cols-2">
+                    <UFormField
+                      :label="step.title"
+                      :name="step.field"
+                    >
+                      <UInput
+                        v-model="state[step.field]"
+                        :type="step.validation.type === 'number' ? 'number' : 'text'"
+                        class="w-full"
+                        size="xl"
+                      />
+                    </UFormField>
+                  </div>
                 </template>
 
                 <!-- Multi Input -->
                 <template v-else-if="step.type === 'multi-input'">
-                  <div class="grid gap-4">
+                  <div class="grid grid-cols-2 gap-y-4 gap-x-12">
                     <UFormField
                       v-for="field in step.fields"
                       :key="field.field"
@@ -309,6 +307,8 @@ function onSubmit(event: { data: any }) {
                       <UInput
                         v-model="state[field.field]"
                         :type="field.validation.type === 'number' ? 'number' : 'text'"
+                        class="w-full"
+                        size="xl"
                       />
                     </UFormField>
                   </div>
@@ -326,29 +326,6 @@ function onSubmit(event: { data: any }) {
               </UForm>
             </div>
           </UCarousel>
-
-          <UButton
-            class="absolute top-1/2 -translate-y-1/2 -left-12 rounded-full"
-            icon="i-lucide-arrow-left"
-            size="lg"
-            @click="prevStep()"
-          />
-          <UButton
-            class="absolute top-1/2 -translate-y-1/2 -right-12 rounded-full"
-            icon="i-lucide-arrow-right"
-            size="lg"
-            @click="nextStep()"
-          />
-        </div>
-
-        <div class="flex gap-3">
-          <button
-            v-for="(_, index) in form.stepSchemas"
-            :key="index"
-            class="size-3 rounded-full transition-colors"
-            :class="currentStep === index ? 'bg-inverted' : 'bg-accented'"
-            @click="goToStep(index)"
-          />
         </div>
       </div>
     </UPageSection>
