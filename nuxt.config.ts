@@ -19,6 +19,13 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2026-02-02',
 
+  nitro: {
+    prerender: {
+      routes: ['/'],
+      crawlLinks: true,
+    },
+  },
+
   eslint: {
     config: {
       standalone: false,

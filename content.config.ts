@@ -10,6 +10,7 @@ export default defineContentConfig({
         hero: z.object({
           title: z.string(),
           headline: z.string(),
+          tags: z.array(z.string()),
           description: z.string(),
         }),
         profile: z.object({
@@ -44,7 +45,7 @@ export default defineContentConfig({
               id: z.string(),
               type: z.literal('checkbox'),
               field: z.string(),
-              label: z.string(),
+              title: z.string(),
               description: z.string().optional(),
               items: z.array(z.string()),
               validation: z.object({
@@ -58,7 +59,7 @@ export default defineContentConfig({
               id: z.string(),
               type: z.literal('radio'),
               field: z.string(),
-              label: z.string(),
+              title: z.string(),
               description: z.string().optional(),
               items: z.array(z.string()),
               validation: z.object({
@@ -70,7 +71,7 @@ export default defineContentConfig({
               id: z.string(),
               type: z.literal('input'),
               field: z.string(),
-              label: z.string(),
+              title: z.string(),
               description: z.string().optional(),
               validation: z.object({
                 type: z.enum(['string', 'email', 'number']),
@@ -87,7 +88,7 @@ export default defineContentConfig({
               id: z.string(),
               type: z.literal('multi-input'),
               field: z.string(),
-              label: z.string().optional(),
+              title: z.string(),
               description: z.string().optional(),
               fields: z.array(z.object({
                 field: z.string(),

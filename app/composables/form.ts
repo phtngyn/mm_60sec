@@ -15,7 +15,7 @@ interface CarouselComponent {
 interface BaseFieldConfig {
   id: string
   field: string
-  label?: string
+  title: string
   description?: string
 }
 
@@ -236,7 +236,6 @@ export function useApplyForm(
   const currentStep = ref(0)
 
   const currentStepConfig = computed(() => form.metadata.steps[currentStep.value]!)
-  const isLastStep = computed(() => currentStep.value === form.stepSchemas.length - 1)
 
   function nextStep() {
     if (currentStep.value < form.stepSchemas.length - 1) {
@@ -279,7 +278,6 @@ export function useApplyForm(
 
     // Computed
     currentStepConfig,
-    isLastStep,
 
     // Navigation functions
     nextStep,
